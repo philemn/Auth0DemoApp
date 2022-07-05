@@ -1,0 +1,16 @@
+const CLIENTID = "";
+const DOMAIN = "[Auth0 domain]";
+const BASE_URL = "https://[Auth0 domain]";
+const DOMAIN_CUSTOM = "[Custom domain configured in Auth0]";
+const BASE_URL_CUSTOM = "https://[Custom domain configured in Auth0]";
+const REDIRECT_URL = window.location.href;
+const AUDIENCE = "http://local.api";
+const PORT = "9999";
+const LOCALHOST = "http://localhost";
+const LOCALURL = LOCALHOST+PORT;
+const PP_ACTIONID = "";
+const MFA_ACTIONID = "";
+const ORG_A_ID = "";
+const ORG_B_ID = "";
+const enterprise_authorization_url = "https://login.microsoftonline.com/neshpdxgmail.onmicrosoft.com/oauth2/v2.0/authorize?login_hint=&response_type=code&client_id=91d67fbd-33ec-49b6-810d-5f7de49cf5d9&redirect_uri=https%3A%2F%2Fhavocbase.us.auth0.com%2Flogin%2Fcallback&nonce=bg1QiFDkq5mq9IiyKb4v&scope=openid%20profile%20email%20https%3A%2F%2Fgraph.microsoft.com%2FUser.Read%20https%3A%2F%2Fgraph.microsoft.com%2FDirectory.Read.All&state=rGCvyR67FdK1uW2aWOYqTA3W9SIAu_nf";
+const enterprise_authorization_name = "Azure AD";
