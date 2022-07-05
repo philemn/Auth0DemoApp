@@ -4,18 +4,16 @@
 
 https://user-images.githubusercontent.com/4019770/176539385-99bc82d6-8616-4589-bb23-36fcbd0863ce.mp4
 
-
-
-
 ## Terminal Commands
 
 1. Download and Install NodeJs from [NodeJs Official Page](https://nodejs.org/en/download/).
 2. Navigate to the root / directory and run npm install to install the dependencies.
 
 ## Documentation
-There are two files you need to worry about:
+There are two files you need to worry about (rename them to .env and LOCAL-VARS.js respectively, before starting the app):
 1. .env file in the root of the directory (note: CLIENT_SECRET and SECRET are the same values)
 2. LOCAL-VARS.js in the assets->js folder 
+
 
 You will need to do a bit of a legwork within the Auth0 platform itself, mainly the following (probably in this order):
 1. Create a Database connection (leave the default name Username-Password-Authentication)
