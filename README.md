@@ -4,7 +4,7 @@
 
 https://user-images.githubusercontent.com/4019770/176539385-99bc82d6-8616-4589-bb23-36fcbd0863ce.mp4
 
-## Terminal Commands
+## Important files
 
 1. Download and Install NodeJs from [NodeJs Official Page](https://nodejs.org/en/download/).
 2. Navigate to the root / directory and run npm install to install the dependencies.
