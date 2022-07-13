@@ -29,7 +29,7 @@ const config = {
   authorizationParams: {
     response_type: 'code',
     audience: process.env.AUDIENCE,
-    scope: process.env.SCOPES,
+    scope: 'openid profile email read:current_user view:balance transfer:funds',
     //screen_hint: 'signup'
   }
 };

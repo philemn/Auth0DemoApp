@@ -38,6 +38,10 @@ router.get('/', function (req, res, next) {
     access_token = req.oidc.accessToken;
     console.log("access token: ",access_token);
   }
+  if(req.oidc.idToken) {
+    id_token = req.oidc.idToken;
+    console.log("id token: ",id_token);
+  }
   
   res.render('dashboard', {
     title: 'CIAM demo',
@@ -49,12 +53,16 @@ router.get('/', function (req, res, next) {
 });
 
 
-router.get('/profile', requiresAuth(), function (req, res, next) {
-  console.log("access token: ", req.oidc.accessToken);
+router.get('/profile', requiresAuth(), async function (req, res, next) {
+  //console.log("access token: ", req.oidc.accessToken);
+  const userInfo = await req.oidc.fetchUserInfo();
+  console.log("userinfo: ",userInfo);
   res.render('profile', {
     isAuthenticated: req.oidc.isAuthenticated(),
-    userProfile: JSON.stringify(req.oidc.user, null, 4),
-    accessToken: JSON.stringify(helper.decodeToken(req.oidc.accessToken), null, 4),
+    userProfile: JSON.stringify(userInfo, null, 4),
+    accessTokenDecoded: JSON.stringify(helper.decodeToken(req.oidc.accessToken.access_token), null, 4),
+    idTokenDecoded: JSON.stringify(helper.decodeToken(req.oidc.idToken), null, 4),
+    accessToken: req.oidc.accessToken.access_token,
     title: 'Profile page',
     section: 'profile',
     subsec: ''
@@ -221,6 +229,36 @@ router.post('/m2m', function (req, res, next) {
 /** MANAGEMENT API */
 /** ************************************************* */
 
+router.post('/updateprofile', function(req,res){
+  let userid = req.body.userid;
+  let body = {'picture': req.body.picture};
+  //console.log("body: ",body);
+  auth0.users.update({id: userid}, body, function (err, response) {
+    if (err) {
+      // Handle error.
+      console.log("Error updating user profile: ", err);
+      res.status(500).send(err);
+    }
+    res.send(response);
+  });
+});
+
+router.post('/enablerule', function(req,res){
+  var params = { id: ACCOUNT_LINKING_RULE_ID };
+  var data = { enabled: 'true'};
+  management.updateRule(params, data, function (err, rule) {
+    if (err) {
+      // Handle error.
+      console.log("Error enabling the account linking rule: ", err);
+      res.status(500).send(err);
+    }
+
+    console.log(rule); // 'my-rule'.
+    res.send(response);
+  });
+});
+
+
 router.get('/actions', function (req, res, next) {
   try {
     auth0.actions.getAllTriggers(
@@ -264,7 +302,7 @@ router.post('/triggerbindings', function (req, res, next) {
 
 router.post('/getaction', function(req,res){
   let actionid = req.body.actionid;
-  console.log("actionid: ",actionid);
+  //console.log("actionid: ",actionid);
   auth0.ActionsManager.get(
     {
       id: actionid

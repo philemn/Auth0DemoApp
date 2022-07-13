@@ -23,7 +23,7 @@ https://login.microsoftonline.com/myaccount.onmicrosoft.com/oauth2/v2.0/authoriz
 4. Create two organizations, name them organization-a and organization-b
 5. Enable and configure SMS passwordless
 6. Register a web application which will give you client_id and client_secret that you need. Under "Advanced Settings" in the Application enable all grant types. Under "Connections" enable the "Username-Password-Authentication" database, Google, Enterprise and SMS passwordless. Also, make sure you specify the correct allowed callback URLs when creating the app in Auth0 (for logout, web origins and CORS simply use http://localhost:9999):
-http://localhost:9999/callback, http://localhost:9999/authn/embedded, http://localhost:9999/test, http://localhost:9999/authn/embedded-lock, http://localhost:9999/authn/embedded-auth0js, http://localhost:9999/orgs, http://localhost:9999/privacy
+http://localhost:9999/callback, http://localhost:9999/authn/embedded, http://localhost:9999/profile, http://localhost:9999/authn/embedded-lock, http://localhost:9999/authn/embedded-auth0js, http://localhost:9999/orgs, http://localhost:9999/privacy
 7. Create an API, using the following identifier: http://local.api; Create two permissions: view:balance and transfer:funds; Authorize the API for your web aplication you created previously and check both permissions
 
 
@@ -42,5 +42,10 @@ $ npm start
 Open your browser and go to http://localhost:9999
 
 NOTE: You can save and deploy actions from within the demo app, however you will still need to go to the Auth0 Admin UI and put the Action into the flow (mainly Login flow). Also, (might be obvious, but) when saving Action if the action with the same name already exists you will get an error in the app.
+
+A couple of things to note:
+1. On the Profile page you can change the user profile picture by clicking on it. 
+2. On the Profile page you can link a Google account to the existing local account, assuming your local account is using the same gmail email. In order for this to work you will need to enable the "Account linking" extension in the Auth0 Admin UI and also enable the Rule that gets added when you do that. For more details see this link: https://auth0.com/docs/customize/extensions/account-link-extension
+2. If you want the user_metadata in the token you will need to deploy an action and add it to the Login flow (for a sample action code see "Action Code Snippets" section in the demo app)
 
 Et Voila! You're welcome.
