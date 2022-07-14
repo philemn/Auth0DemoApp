@@ -1,10 +1,6 @@
 # [OKTA/AUTH0 CIAM Demo App](https://okta.com)
 
-
-
-https://user-images.githubusercontent.com/4019770/178985667-b8ff7b34-f9e9-4d0a-a86a-338cf91931f0.mp4
-
-
+https://user-images.githubusercontent.com/4019770/178989676-5c921e4f-4d69-40f6-8a14-8ead2893669c.mp4
 
 ## Pre-reqs
 
