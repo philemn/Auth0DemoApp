@@ -43,7 +43,7 @@ NOTE: You can save and deploy actions from within the demo app, however you will
 
 A couple of things to note:
 1. On the Profile page you can change the user profile picture by clicking on it. 
-2. On the Profile page you can link a Google account to the existing local account, assuming your local account is using the same gmail email. In order for this to work you will need to enable the "Account linking" extension in the Auth0 Admin UI and also enable the Rule that gets added when you do that. For more details see this link: https://auth0.com/docs/customize/extensions/account-link-extension
+2. On the Profile page you can link (and unlink) a Google account to the existing local account, assuming your local account is using the same gmail email. In order for this to work you will need to enable the "Account linking" extension in the Auth0 Admin UI and also enable the Rule that gets added when you do that. For more details see this link: https://auth0.com/docs/customize/extensions/account-link-extension
 3. If you want the user_metadata in the token you will need to deploy an action and add it to the Login flow (for a sample action code see "Action Code Snippets" section in the demo app)
 4. Clicking on the jwt.io link in the menu when a user is logged-in, will automatically attach the access token so you can view it in jwt.io decoded
 5. For a logged-in user, clicking on the Email->atko.email menu option, it will go directly to that user's inbox on atko.email
