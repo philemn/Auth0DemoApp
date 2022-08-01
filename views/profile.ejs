@@ -129,6 +129,8 @@
   </div>
 
   <div id="userid" style="display: none"><%= user.sub %></div>
+  <div id="idtdecoded" style="display: none"><%= idTokenDecoded %></div>
+  <div id="identities" style="display: none"><%= identities %></div>
   <!--   Core JS Files   -->
   <script src="../assets/js/core/popper.min.js"></script>
   <script src="../assets/js/core/bootstrap.min.js"></script>
@@ -159,6 +161,41 @@
   <script src="https://cdn.auth0.com/js/auth0/9.18/auth0.min.js"></script>
 
   <script>
+    //let idt = JSON.parse($("#idtdecoded").text());
+    //console.log("idt: ",idt);
+    let identities = $("#identities").text();
+    console.log("identities: ",identities);
+    var issocial = false;
+    let social_userid = null;
+    if(identities != null && identities != ""){
+      let idnts = JSON.parse(identities);
+      for (var i = 0; i < idnts.length; i++){
+        var obj = idnts[i];
+        console.log("obj: ",obj);
+        if(obj.connection === GOOGLE_CONNECTION_NAME){
+          social_userid = obj['userId'];
+          console.log("social_userid: ",social_userid);
+          for (var key in obj){
+            var value = obj[key];
+            if(key === 'isSocial'){
+              if(value === true){
+                issocial = true;                
+              }
+            }
+          }
+        } else {
+          continue;
+        }
+      }
+    }
+    
+    
+    if(issocial){
+      $("#linktogoogle").text("Unlink this account from my Google account");
+    } else {
+      $("#linktogoogle").text("Link this account to my Google account");
+    }
+
     var auth0 = new auth0.WebAuth({
       domain:       DOMAIN,
       clientID:     CLIENTID
@@ -166,6 +203,7 @@
 
     auth0.parseHash({ hash: window.location.hash }, function (err, authResult) {
       if (err) {
+        window.location.hash = '';
         return console.log(err);
       }
 
@@ -175,9 +213,14 @@
       // authResult.expiresIn - string with the access token's expiration time in seconds
       // authResult.idToken - ID token JWT containing user profile information
       if(authResult){
+        /*if (authResult.accessToken) {
+            auth0.client.userInfo(
+              authResult.accessToken
+            );
+          }*/
         console.log("AT: ",authResult.accessToken);
       }
-     
+      window.location.hash = '';
       
     });
 
@@ -207,12 +250,30 @@
 
     $("#linktogoogle").click(function(e){
       e.preventDefault();
-      //window.location.href = BASE_URL+"/authorize?client_id="+CLIENTID+"&response_type=token id_token&redirect_uri=http://localhost:9999/callback&scope=openid&nonce=693759&state=704144&connection=google-oauth2"
-      auth0.authorize({
-        responseType: "id_token token",
-        redirectUri: REDIRECT_URL,
-        connection: GOOGLE_CONNECTION_NAME
+      let userid = $("#userid").text();
+      if($(this).text().toLowerCase().startsWith("unlink")){ 
+        $.ajax({
+          type: "POST",
+          url: "/unlinkuser",
+          contentType: 'application/json',
+          data: JSON.stringify({'id': userid, provider: GOOGLE_CONNECTION_NAME, user_id: social_userid}),
+          success: function(data){
+              console.log("data: ",data);
+              alert("Google account has been unlinked...you will need to re-login to see the changes");
+              //location.reload();
+          },
+          error: function(errMsg){
+              alert("Error occured: ",errMsg);
+          }
       });
+      } else {
+        //window.location.href = BASE_URL+"/authorize?client_id="+CLIENTID+"&response_type=token id_token&redirect_uri=http://localhost:9999/callback&scope=openid&nonce=693759&state=704144&connection=google-oauth2"
+        auth0.authorize({
+          responseType: "id_token token",
+          redirectUri: REDIRECT_URL,
+          connection: GOOGLE_CONNECTION_NAME
+        });
+      }
     });
 
     /*$("#enablerule").click(function(e){
