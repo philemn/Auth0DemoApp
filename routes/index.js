@@ -8,6 +8,7 @@ var axios = require("axios").default;
 var qs = require('qs');
 let ManagementClient = require('auth0').ManagementClient;
 var randomWords = require('random-words');
+const jwt_decode = require('jwt-decode');
 
 dotenv.load();
 
@@ -56,6 +57,9 @@ router.get('/', function (req, res, next) {
 router.get('/profile', requiresAuth(), async function (req, res, next) {
   //console.log("access token: ", req.oidc.accessToken);
   const userInfo = await req.oidc.fetchUserInfo();
+  const namespace_url = process.env.NAMESPACE+"/identities";
+  const identities = req.oidc.user[namespace_url];
+  console.log("identities: ",identities);
   console.log("userinfo: ",userInfo);
   res.render('profile', {
     isAuthenticated: req.oidc.isAuthenticated(),
@@ -63,6 +67,7 @@ router.get('/profile', requiresAuth(), async function (req, res, next) {
     accessTokenDecoded: JSON.stringify(helper.decodeToken(req.oidc.accessToken.access_token), null, 4),
     idTokenDecoded: JSON.stringify(helper.decodeToken(req.oidc.idToken), null, 4),
     accessToken: req.oidc.accessToken.access_token,
+    identities: identities?JSON.stringify(identities):"",
     title: 'Profile page',
     section: 'profile',
     subsec: ''
@@ -237,6 +242,18 @@ router.post('/updateprofile', function(req,res){
     if (err) {
       // Handle error.
       console.log("Error updating user profile: ", err);
+      res.status(500).send(err);
+    }
+    res.send(response);
+  });
+});
+
+router.post('/unlinkuser', function(req,res){
+  console.log("unlinkuser body: ",req.body);
+  auth0.users.unlink(req.body, function (err, response) {
+    if (err) {
+      // Handle error.
+      console.log("Error unlinking users: ", err);
       res.status(500).send(err);
     }
     res.send(response);
